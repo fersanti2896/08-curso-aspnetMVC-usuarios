@@ -1,0 +1,19 @@
+﻿
+#reordenable tr {
+    cursor: move;
+}
+
+.contenedor-totales {
+    display: flex;
+    font-size: 20px;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.activo {
+    color: green;
+}
+
+.pasivo {
+    color: red;
+}

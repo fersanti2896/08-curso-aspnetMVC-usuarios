@@ -1,0 +1,54 @@
+﻿@model ReporteTransacciones
+
+@{
+    var resumenMontos = new ResumenMontosModel() {
+        Ingresos = Model.BalanceDepositos,
+        Gastos = Model.BalanceRetiros,
+        Total = Model.Total
+    };
+}
+
+<partial name="_NavegarMeses" model="@Model.FechaInicio"></partial>
+
+<partial name="_ResumenMontos" model="@resumenMontos"></partial>
+
+@if (Model.TransaccionesAgrupadas.Count() == 0) {
+    <h5>No hay datos para mostrar</h5>
+} else {
+    <table class="table table-hover">
+        <tbody>
+            @foreach (var transacciones in Model.TransaccionesAgrupadas)  {
+                <tr style="background-color: lightblue; font-size: 20px;">
+                    <td colspan="3">
+                        @transacciones.FechaTransaccion.Day
+                        <span class="badge bg-secondary">
+                            @transacciones.FechaTransaccion.ToString("ddd")
+                        </span>
+                    </td>
+                    <td class="activo">$@transacciones.BalanceDepositos.ToString("N")</td>
+                    <td class="pasivo">$@transacciones.BalanceRetiros.ToString("N")</td>
+                </tr>
+                @foreach (var tran in transacciones.Transacciones) {
+                    <tr style="vertical-align: middle">
+                        <td>
+                            <a asp-controller="Transacciones" 
+                               asp-action="Editar" 
+                               asp-route-id="@tran.Id"
+                               asp-route-urlRetorno="@ViewBag.urlRetorno">
+                                <i class="bi-pencil"></i>
+                            </a>
+                        </td>
+                        <td>@tran.Categoria</td>
+                        <td>@tran.Cuenta</td>
+                        <td class="activo">
+                            @(tran.TipoOperacionId == TipoOperacionModel.Ingreso ? "$" + tran.Monto.ToString("N") : null)
+                        </td>
+                        <td class="pasivo">
+                            @(tran.TipoOperacionId == TipoOperacionModel.Gasto ? "$" + tran.Monto.ToString("N") : null)
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}

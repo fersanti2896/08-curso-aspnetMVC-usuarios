@@ -1,0 +1,20 @@
+﻿
+.acordeon-cuenta button {
+    color: black !important;
+    font-size: 18px;
+}
+
+    .acordeon-cuenta button > span {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+.acordeon-cuenta ul li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.acordeon-cuenta .accordion-collapse {
+    font-size: 18px;
+}

@@ -1,0 +1,19 @@
+﻿@model SubMenuModel
+
+<ul class="nav nav-pills nav-fill mb-3">
+    <li class="nav-item">
+        <a class="nav-link @(Model == SubMenuModel.Diario ? "active" : null)" asp-action="Index">Diario</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model == SubMenuModel.Semanal ? "active" : null)" asp-action="Semanal">Semanal</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model == SubMenuModel.Mensual ? "active" : null)"  asp-action="Mensual">Mensual</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model == SubMenuModel.Excel ? "active" : null)" asp-action="Excel">Excel</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model == SubMenuModel.Calendario ? "active" : null)" asp-action="Calendario">Calendario</a>
+    </li>
+</ul>
