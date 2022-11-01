@@ -16,7 +16,12 @@ builder.Services.AddTransient<ITransaccionesRepository, TransaccionesRepository>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IReportesRepository, ReportesRepository>();
 builder.Services.AddTransient<IUserStore<UsuarioModel>, UsuarioStore>();
-builder.Services.AddIdentityCore<UsuarioModel>();
+builder.Services.AddIdentityCore<UsuarioModel>(opc => {
+    opc.Password.RequireDigit = false;
+    opc.Password.RequireLowercase = false;
+    opc.Password.RequireUppercase = false;
+    opc.Password.RequireNonAlphanumeric = false;
+}).AddErrorDescriber<MensajesErrorIdentity>();
 
 /* Configuracion de AutoMapper */
 builder.Services.AddAutoMapper(typeof(Program));

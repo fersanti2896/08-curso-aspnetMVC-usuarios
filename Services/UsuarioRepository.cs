@@ -17,7 +17,8 @@ namespace ManejoPresupuesto.Services {
         public async Task<int> CrearUsuario(UsuarioModel usuario) { 
             using var connection = new SqlConnection(configurationString);
             var id = await connection.QuerySingleAsync<int>(@"INSERT INTO Usuarios (Email, EmailNormalizado, PasswordHash)
-                                                              VALUES (@Email, @EmailNormalizado, @PasswordHash)", usuario);
+                                                              VALUES (@Email, @EmailNormalizado, @PasswordHash);
+                                                              SELECT SCOPE_IDENTITY();", usuario);
 
             return id;
         }

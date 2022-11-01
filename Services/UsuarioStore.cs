@@ -21,9 +21,7 @@ namespace ManejoPresupuesto.Services {
             throw new NotImplementedException();
         }
 
-        public void Dispose() {
-            throw new NotImplementedException();
-        }
+        public void Dispose() { }
 
         public async Task<UsuarioModel> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken) {
             return await usuarioRepository.BuscarUsuarioByEmail(normalizedEmail);
