@@ -1,5 +1,6 @@
 ﻿using ManejoPresupuesto.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,13 @@ namespace ManejoPresupuesto.Controllers {
             this.signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         public IActionResult Registro() {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Registro(RegistroModel modelo) {
             if (!ModelState.IsValid) { 
                 return View(modelo);
@@ -44,11 +47,13 @@ namespace ManejoPresupuesto.Controllers {
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login() {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginModel model) {
             if (!ModelState.IsValid) { 
                 return View(model);   

@@ -2,11 +2,13 @@
 using ClosedXML.Excel;
 using ManejoPresupuesto.Models;
 using ManejoPresupuesto.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 
 namespace ManejoPresupuesto.Controllers {
+
     public class TransaccionesController : Controller {
         private readonly IUsuarioRepository usuarioRepository;
         private readonly ITransaccionesRepository transaccionesRepository;

@@ -1,11 +1,17 @@
 using ManejoPresupuesto.Models;
 using ManejoPresupuesto.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var politicaUsuarioAutenticado = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
+                                                                 .Build();
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opc => {
+    opc.Filters.Add(new AuthorizeFilter(politicaUsuarioAutenticado));
+});
 
 /* Relacionando Servicio con Interfaz */
 builder.Services.AddTransient<ITiposCuentasRepository, TiposCuentasRepository>();
@@ -29,7 +35,10 @@ builder.Services.AddAuthentication(opc => {
     opc.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
     opc.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
     opc.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-}).AddCookie(IdentityConstants.ApplicationScheme);
+}).AddCookie(IdentityConstants.ApplicationScheme, opc => {
+    opc.LoginPath = "/Usuarios/Login";
+});
+ 
 
 /* Configuracion de AutoMapper */
 builder.Services.AddAutoMapper(typeof(Program));
