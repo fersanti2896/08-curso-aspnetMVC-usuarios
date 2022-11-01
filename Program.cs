@@ -16,12 +16,20 @@ builder.Services.AddTransient<ITransaccionesRepository, TransaccionesRepository>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IReportesRepository, ReportesRepository>();
 builder.Services.AddTransient<IUserStore<UsuarioModel>, UsuarioStore>();
+builder.Services.AddTransient<SignInManager<UsuarioModel>>();
+
 builder.Services.AddIdentityCore<UsuarioModel>(opc => {
     opc.Password.RequireDigit = false;
     opc.Password.RequireLowercase = false;
     opc.Password.RequireUppercase = false;
     opc.Password.RequireNonAlphanumeric = false;
 }).AddErrorDescriber<MensajesErrorIdentity>();
+
+builder.Services.AddAuthentication(opc => {
+    opc.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    opc.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+    opc.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+}).AddCookie(IdentityConstants.ApplicationScheme);
 
 /* Configuracion de AutoMapper */
 builder.Services.AddAutoMapper(typeof(Program));
@@ -40,7 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

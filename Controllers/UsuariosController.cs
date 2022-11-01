@@ -1,13 +1,17 @@
 ﻿using ManejoPresupuesto.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManejoPresupuesto.Controllers {
     public class UsuariosController : Controller {
         private readonly UserManager<UsuarioModel> userManager;
+        private readonly SignInManager<UsuarioModel> signInManager;
 
-        public UsuariosController(UserManager<UsuarioModel> userManager) {
+        public UsuariosController(UserManager<UsuarioModel> userManager,
+                                  SignInManager<UsuarioModel> signInManager) {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Registro() {
@@ -27,6 +31,8 @@ namespace ManejoPresupuesto.Controllers {
             var resultado = await userManager.CreateAsync(usuario, password: modelo.Password);
 
             if (resultado.Succeeded) {
+                await signInManager.SignInAsync(usuario, isPersistent: true);
+
                 return RedirectToAction("Index", "Transacciones");
             } else {
                 foreach (var error in resultado.Errors) {
@@ -35,6 +41,35 @@ namespace ManejoPresupuesto.Controllers {
 
                 return View(modelo);
             }            
+        }
+
+        [HttpGet]
+        public IActionResult Login() {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel model) {
+            if (!ModelState.IsValid) { 
+                return View(model);   
+            }
+
+            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.Recuerdame, lockoutOnFailure: false);
+
+            if (result.Succeeded) {
+                return RedirectToAction("Index", "Transacciones");
+            } else {
+                ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos");
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout() {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+
+            return RedirectToAction("Index", "Transacciones");
         }
     }
 }
